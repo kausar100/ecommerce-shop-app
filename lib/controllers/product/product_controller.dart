@@ -12,7 +12,7 @@ class ProductController extends GetxController {
   }
 
   void changeQuantity(int newQuantity) {
-    if (newQuantity <= 1) {
+    if (newQuantity < 1) {
       return;
     }
     productQuantity.value = newQuantity;
