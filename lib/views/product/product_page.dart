@@ -1,4 +1,5 @@
 import 'package:ecommerce_shop/controllers/product/product_controller.dart';
+import 'package:ecommerce_shop/shared/shared_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -52,10 +53,13 @@ class ProductPage extends GetView<ProductController> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Flexible(
-                                child: Text(
-                                  product.title.toString(),
-                                  maxLines: 3,
-                                  style: theme.textTheme.titleLarge,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(right: 8.0),
+                                  child: Text(
+                                    product.title.toString(),
+                                    maxLines: 3,
+                                    style: theme.textTheme.titleLarge,
+                                  ),
                                 ),
                               ),
                               Text(
@@ -96,14 +100,46 @@ class ProductPage extends GetView<ProductController> {
                             child: Row(
                               children: [
                                 Text(
-                                  'CATEGORY : ',
-                                  style: theme.textTheme.titleMedium,
-                                ),
-                                Text(
                                   product.category.toString().toUpperCase(),
                                   style: theme.textTheme.titleMedium
                                       ?.copyWith(fontWeight: FontWeight.w400),
                                 ),
+                                const Spacer(),
+                                Row(
+                                  children: [
+                                    IconButton(
+                                      onPressed: () {
+                                        controller.changeQuantity(
+                                            controller.productQuantity.value -
+                                                1);
+                                      },
+                                      icon: const Icon(
+                                        Icons.remove_circle,
+                                        color: Colors.orange,
+                                        size: 32.0,
+                                      ),
+                                    ),
+                                    Obx(() => Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          child: Text(
+                                              '${controller.productQuantity.value}',
+                                              style: theme.textTheme.bodyLarge),
+                                        )),
+                                    IconButton(
+                                      onPressed: () {
+                                        controller.changeQuantity(
+                                            controller.productQuantity.value +
+                                                1);
+                                      },
+                                      icon: const Icon(
+                                        Icons.add_circle,
+                                        color: Colors.orange,
+                                        size: 32.0,
+                                      ),
+                                    ),
+                                  ],
+                                )
                               ],
                             ),
                           ),
@@ -117,6 +153,50 @@ class ProductPage extends GetView<ProductController> {
                               textAlign: TextAlign.justify,
                               style: theme.textTheme.bodyLarge,
                             ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: [
+                              Obx(() => Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8.0),
+                                    child: Text(
+                                        '\$${(product.price! * controller.productQuantity.value).toStringAsFixed(2)}',
+                                        style: theme.textTheme.titleLarge),
+                                  )),
+                              const Spacer(),
+                              InkWell(
+                                  onTap: () {
+                                    CommonWidgets.showSuccessToast(
+                                        'Order Confirmation',
+                                        'Successfully Confirm your order');
+                                  },
+                                  child: Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.5,
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 24.0, vertical: 16.0),
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                          gradient: const LinearGradient(
+                                              colors: [
+                                                Colors.deepPurpleAccent,
+                                                Colors.indigoAccent,
+                                                Colors.indigo
+                                              ])),
+                                      child: const Center(
+                                        child: Text(
+                                          'Buy Now',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ))),
+                            ],
                           ),
                         ),
                       ],
